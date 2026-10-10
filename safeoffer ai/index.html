@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeOffer AI – Is This Job Offer Safe?</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- INTRO VIDEO SPLASH SCREEN -->
+  <div id="intro-video-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;">
+    <video id="introVideo" width="100%" height="100%" style="object-fit: cover;" autoplay muted playsinline>
+      <source src="video.mp4" type="video/mp4">
+      
+    </video>
+  </div>
+
+  <header class="app-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="brand-container">
+          <div class="logo-wrapper">
+            <img src="logo.jpeg" alt="SafeOffer AI Logo" class="site-logo" />
+          </div>
+          <div class="header-text">
+            <h1 class="brand-title">
+              SafeOffer <span class="ai-pill">AI</span>
+            </h1>
+            <p class="brand-tagline" data-i18n="tagline">Before You Accept, Check the Risk.</p>
+            <p class="brand-subtext" data-i18n="subtext">Analyze suspicious job offers before sharing money or personal information.</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <select id="language-select" class="lang-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="hi">हिंदी (Hindi)</option>
+            <option value="es">Español (Spanish)</option>
+            <option value="fr">Français (French)</option>
+            <option value="de">Deutsch (German)</option>
+            <option value="zh">中文 (Chinese)</option>
+            <option value="ja">日本語 (Japanese)</option>
+            <option value="ar">العربية (Arabic)</option>
+            <option value="ru">Русский (Russian)</option>
+          </select>
+          <button id="btn-demo" class="btn btn-demo" data-i18n="btnDemo">✨ Try Demo Offer</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="disclaimer-banner">
+      <span class="disclaimer-icon">⚠️</span>
+      <p><strong data-i18n="disclaimerTitle">Disclaimer:</strong> <span data-i18n="disclaimerText">This score is an awareness tool and does not guarantee that a job offer is genuine or fraudulent. Always independently verify the employer.</span></p>
+    </div>
+
+    <section class="card form-card">
+      <div class="card-header form-card-header">
+        <div>
+          <h2 data-i18n="formTitle">Enter Job Offer Details</h2>
+          <p data-i18n="formSub">Fill out all fields below for accurate risk scoring and dynamic Pros & Cons analysis.</p>
+        </div>
+        <button type="button" id="btn-ai-parse" class="btn btn-secondary btn-ai-action" data-i18n="btnAiParse">✨ Auto-Fill from Description</button>
+      </div>
+
+      <form id="risk-form" class="job-form">
+        <div class="form-grid">
+          
+          <div class="form-group full-width">
+            <label for="jobDescription"><span data-i18n="labelJobDesc">Job Description / Email / WhatsApp Text</span> <span class="required">*</span></label>
+            <textarea id="jobDescription" rows="4" data-i18n-placeholder="descPlaceholder" placeholder="Paste the offer letter text, email text, or WhatsApp scam message here..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="companyName"><span data-i18n="labelCompany">Company Name</span> <span class="required">*</span></label>
+            <input type="text" id="companyName" placeholder="e.g., ABC Technologies" required />
+          </div>
+
+          <div class="form-group">
+            <label for="jobPosition"><span data-i18n="labelPosition">Job Position</span> <span class="required">*</span></label>
+            <input type="text" id="jobPosition" placeholder="e.g., Software Developer" required />
+          </div>
+
+          <div class="form-group">
+            <label for="experience"><span data-i18n="labelExperience">Experience Required</span> <span class="required">*</span></label>
+            <select id="experience" required>
+              <option value="">Select experience level</option>
+              <option value="Fresher / 0 years">Fresher / 0 years</option>
+              <option value="1–2 years">1–2 years</option>
+              <option value="3–5 years">3–5 years</option>
+              <option value="5+ years">5+ years</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="salary"><span data-i18n="labelSalary">Annual Salary Offered (INR ₹)</span> <span class="required">*</span></label>
+            <input type="number" id="salary" placeholder="e.g., 600000" min="0" required />
+          </div>
+
+          <div class="form-group">
+            <label for="interviewProcess"><span data-i18n="labelInterview">Interview Process</span> <span class="required">*</span></label>
+            <select id="interviewProcess" required>
+              <option value="">Select interview type</option>
+              <option value="Technical + HR interview">Technical + HR interview</option>
+              <option value="Online test + interview">Online test + interview</option>
+              <option value="HR interview only">HR interview only</option>
+              <option value="No formal interview">No formal interview</option>
+              <option value="Only WhatsApp/text interview">Only WhatsApp/text interview</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="communicationChannel"><span data-i18n="labelComm">Communication Channel</span> <span class="required">*</span></label>
+            <select id="communicationChannel" required>
+              <option value="">Select communication channel</option>
+              <option value="Official company email">Official company email</option>
+              <option value="Company website">Company website</option>
+              <option value="Gmail/Yahoo/personal email">Gmail/Yahoo/personal email</option>
+              <option value="WhatsApp">WhatsApp</option>
+              <option value="Telegram">Telegram</option>
+              <option value="Phone call only">Phone call only</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="paymentRequested"><span data-i18n="labelPayment">Payment Requested?</span> <span class="required">*</span></label>
+            <select id="paymentRequested" required>
+              <option value="">Select option</option>
+              <option value="No">No</option>
+              <option value="Registration fee">Registration fee</option>
+              <option value="Training fee">Training fee</option>
+              <option value="Security deposit">Security deposit</option>
+              <option value="Equipment fee">Equipment fee</option>
+              <option value="Other payment">Other payment</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="sensitiveInfo"><span data-i18n="labelSensitive">Sensitive Information Requested?</span> <span class="required">*</span></label>
+            <select id="sensitiveInfo" required>
+              <option value="">Select option</option>
+              <option value="No">No</option>
+              <option value="Aadhaar/ID">Government ID</option>
+              <option value="PAN">PAN</option>
+              <option value="Bank details">Bank details</option>
+              <option value="Card/UPI details">Card/UPI details</option>
+              <option value="Multiple sensitive details">Multiple sensitive details</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="urgentPressure"><span data-i18n="labelUrgent">Urgent Pressure?</span> <span class="required">*</span></label>
+            <select id="urgentPressure" required>
+              <option value="">Select option</option>
+              <option value="No">No</option>
+              <option value="Yes, immediate response required">Yes, immediate response required</option>
+              <option value="Yes, payment deadline given">Yes, payment deadline given</option>
+              <option value="Yes, threatening to cancel offer">Yes, threatening to cancel offer</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="recruiterEmail" data-i18n="labelRecruiterEmail">Recruiter Email</label>
+            <input type="email" id="recruiterEmail" placeholder="e.g., hr@company.com" />
+          </div>
+
+          <div class="form-group full-width">
+            <label for="offerUrl" data-i18n="labelOfferUrl">Job Offer Website / URL</label>
+            <input type="url" id="offerUrl" placeholder="https://example.com/careers/job" />
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-large" data-i18n="btnAnalyze">🔍 Analyze Job Offer</button>
+          <button type="button" id="btn-reset" class="btn btn-secondary" data-i18n="btnReset">🔄 Reset Form</button>
+        </div>
+      </form>
+    </section>
+
+    <div id="loading-spinner" class="loading-container hidden">
+      <div class="spinner"></div>
+      <p data-i18n="loadingText">Analyzing offer patterns & calculating risk metrics with SafeOffer AI...</p>
+    </div>
+
+    <div id="dashboard-results" class="dashboard-results hidden">
+      
+      <div id="cyber-crime-alert-box" class="card cyber-crime-card hidden">
+        <div class="cyber-header">
+          <span class="cyber-icon">🚨</span>
+          <div>
+            <h3>CRITICAL FRAUD ALERT: High Risk Detected!</h3>
+            <p>This job offer exhibits severe scam indicators. Take immediate protective action below.</p>
+          </div>
+        </div>
+        <div class="cyber-actions-grid">
+          <a href="https://cybercrime.gov.in" target="_blank" rel="noopener noreferrer" class="btn btn-cyber-primary">
+            🛡️ Report on National Cyber Crime Portal
+          </a>
+          <button type="button" id="btn-report-whatsapp" class="btn btn-cyber-secondary">
+            📱 How to Block & Report Scam Number
+          </button>
+        </div>
+      </div>
+
+      <section class="card text-feedback-card" id="text-feedback-section">
+        <div class="card-header">
+          <h2>📝 Message Intelligence & Authenticity Verdict</h2>
+          <p>Independent AI analysis and verification of your provided text and form inputs.</p>
+        </div>
+        <div class="verdict-banner" id="verdict-banner-box">
+          <h3 id="verdict-title">Verdict: Evaluating...</h3>
+          <p id="verdict-desc">-</p>
+        </div>
+      </section>
+
+      <div class="results-grid">
+        <div class="card metric-card">
+          <h3>Overall Risk Score</h3>
+          <div class="chart-container-donut">
+            <canvas id="riskGaugeChart"></canvas>
+            <div class="gauge-center-text">
+              <span id="gauge-score-val">0</span>
+              <span class="gauge-max">/ 100</span>
+            </div>
+          </div>
+          <div id="risk-badge" class="risk-badge">Low Risk</div>
+        </div>
+
+        <div class="card metric-card">
+          <h3>Category Risk Breakdown</h3>
+          <div class="chart-container-bar">
+            <canvas id="categoryBarChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <section class="card pros-cons-card">
+        <div class="card-header">
+          <h2>⚖️ Message Pros & Cons Analysis</h2>
+          <p>Detailed point-by-point breakdown explaining why each option is a Pro or a Con.</p>
+        </div>
+        <div class="pros-cons-grid">
+          <div class="pros-box">
+            <h4>🟢 Positive Indicators (Pros)</h4>
+            <ul id="pros-list"></ul>
+          </div>
+          <div class="cons-box">
+            <h4>🔴 Warning Indicators (Cons)</h4>
+            <ul id="cons-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <h2>🚩 Detected Risk Factors (<span id="risk-count">0</span>)</h2>
+          <p>Click on any risk card to inspect detailed detection analysis.</p>
+        </div>
+        <div id="detected-risks-list" class="risks-list"></div>
+      </section>
+
+      <section class="card checklist-card">
+        <div class="card-header">
+          <h2>🔎 Verification Checklist</h2>
+          <p>Complete these verification steps independently before proceeding with the employer.</p>
+        </div>
+        <div class="checklist-grid">
+          <label class="check-item"><input type="checkbox" /> <span>Company has an official website</span></label>
+          <label class="check-item"><input type="checkbox" /> <span>Job exists on the official careers page</span></label>
+          <label class="check-item"><input type="checkbox" /> <span>Recruiter email uses company domain</span></label>
+          <label class="check-item"><input type="checkbox" /> <span>Recruiter identity can be independently verified</span></label>
+          <label class="check-item"><input type="checkbox" /> <span>No payment is required</span></label>
+          <label class="check-item"><input type="checkbox" /> <span>No unnecessary sensitive information requested</span></label>
+          <label class="check-item"><input type="checkbox" /> <span>Company contact details can be independently confirmed</span></label>
+        </div>
+      </section>
+
+      <section class="card summary-card" id="printable-summary">
+        <div class="card-header">
+          <h2>📋 Job Offer Summary</h2>
+        </div>
+        <div class="summary-content">
+          <div class="summary-details">
+            <p><strong>Company:</strong> <span id="sum-company">-</span></p>
+            <p><strong>Position:</strong> <span id="sum-position">-</span></p>
+            <p><strong>Salary:</strong> <span id="sum-salary">-</span></p>
+            <p><strong>Experience:</strong> <span id="sum-experience">-</span></p>
+            <p><strong>Interview Process:</strong> <span id="sum-interview">-</span></p>
+          </div>
+          <div class="summary-metrics">
+            <p><strong>Risk Score:</strong> <span id="sum-score">-</span></p>
+            <p><strong>Risk Level:</strong> <span id="sum-level">-</span></p>
+            <p><strong>Red Flags Count:</strong> <span id="sum-flags">-</span></p>
+          </div>
+        </div>
+        <div class="top-reasons">
+          <h4>Top Risk Drivers:</h4>
+          <ol id="top-reasons-list"></ol>
+        </div>
+      </section>
+
+      <div class="report-actions">
+        <button id="btn-print" class="btn btn-primary">🖨️ Print / Save Report</button>
+        <button id="btn-copy" class="btn btn-secondary">📋 Copy Summary</button>
+        <button id="btn-reanalyze" class="btn btn-secondary">🔄 Analyze Another Offer</button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
